@@ -1,0 +1,35 @@
+{
+  "name": "promise-mutex",
+  "version": "0.1.0",
+  "description": "mutual-exclusion lock for promise chains",
+  "keywords": [
+    "lock",
+    "mutex",
+    "promise",
+    "chain"
+  ],
+  "homepage": "https://github.com/plenluno/promise-mutex",
+  "bugs": {
+    "url": "https://github.com/plenluno/promise-mutex/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Yoshiyuki Mineo",
+    "email": "plenluno@zoho.com"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plenluno/promise-mutex.git"
+  },
+  "scripts": {
+    "test": "mocha -R spec test"
+  },
+  "devDependencies": {
+    "chai": "~3.3.0",
+    "mocha": "~2.3.3"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  }
+}
