@@ -1,5 +1,7 @@
 # promise-mutex
 
+[![Build Status](https://travis-ci.org/plenluno/promise-mutex.svg?branch=master)](https://travis-ci.org/plenluno/promise-mutex)
+
 The promise-mutex package provides a mutual-exclusion lock to allow only one promise chain to run at a time.
 
 ## Installation
