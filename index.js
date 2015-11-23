@@ -2,66 +2,67 @@
 
 const locked = Symbol('locked');
 
-var _lock = function (mutex) {
-    if (mutex[locked]) {
-        return false;
-    } else {
-        mutex[locked] = true;
-        return true;
-    }
-};
+function _lock(mutex) {
+  if (mutex[locked]) {
+    return false;
+  }
 
-var _unlock = function (mutex) {
-    if (mutex[locked]) {
-        mutex[locked] = false;
-        return true;
-    } else {
-        return false;
-    }
-};
+  mutex[locked] = true;
+  return true;
+}
+
+function _unlock(mutex) {
+  if (!mutex[locked]) {
+    return false;
+  }
+
+  mutex[locked] = false;
+  return true;
+}
 
 class Mutex {
-    constructor() {
-        this[locked] = false;
-    }
+  constructor() {
+    this[locked] = false;
+  }
 
-    lock(f) {
-        var self = this;
-        return new Promise(function executor(resolve, reject) {
-            if (!_lock(self)) {
-                setTimeout(function () {
-                    executor(resolve, reject);
-                }, 0);
-                return;
-            }
+  lock(f) {
+    const self = this;
+    return new Promise(function executor(resolve, reject) {
+      if (!_lock(self)) {
+        setTimeout(() => {
+          executor(resolve, reject);
+        }, 0);
+        return;
+      }
 
-            if (!(f instanceof Function)) {
-                reject(new Error('argument not function'));
-                _unlock(self);
-                return;
-            }
+      if (!(f instanceof Function)) {
+        reject(new Error('argument not function'));
+        _unlock(self);
+        return;
+      }
 
-            try {
-                var r = f();
-            } catch (e) {
-                reject(e);
-                _unlock(self);
-                return;
-            }
+      let r;
+      try {
+        r = f();
+      } catch (e) {
+        reject(e);
+        _unlock(self);
+        return;
+      }
 
-            Promise.resolve(r).then(function (res) {
-                resolve(res);
-                _unlock(self);
-            }).catch(function (err) {
-                reject(err);
-                _unlock(self);
-            });
-        });
-    }
+      Promise.resolve(r).then(res => {
+        resolve(res);
+        _unlock(self);
+      }).catch(err => {
+        reject(err);
+        _unlock(self);
+      });
+    });
+  }
 
-    isLocked() {
-        return this[locked];
-    }
+  isLocked() {
+    return this[locked];
+  }
 }
 
 module.exports = Mutex;

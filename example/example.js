@@ -1,22 +1,21 @@
-'use strict';
+const Mutex = require('../');
 
-var Mutex = require('../');
-
-var print = x => new Promise(resolve => {
-    console.log(x);
-    resolve(x);
+const print = x => new Promise(resolve => {
+  /* eslint-disable no-console */
+  console.log(x);
+  resolve(x);
 });
 
-var doublePrint = x => print(x).then(x => print(x));
+const doublePrint = x => print(x).then(y => print(y));
 
-var mutex = new Mutex();
+const mutex = new Mutex();
 
 Promise.all([
-    // 1 2 1 2
-    doublePrint(1),
-    doublePrint(2)
+  // 1 2 1 2
+  doublePrint(1),
+  doublePrint(2),
 ]).then(() => {
-    // 1 1 2 2
-    mutex.lock(() => doublePrint(1));
-    mutex.lock(() => doublePrint(2));
+  // 1 1 2 2
+  mutex.lock(() => doublePrint(1));
+  mutex.lock(() => doublePrint(2));
 });
